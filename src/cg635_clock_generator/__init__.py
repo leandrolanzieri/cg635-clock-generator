@@ -1,5 +1,29 @@
 import sys
 
+from .cg635_clock_generator import CG635ClockGenerator
+from .constants import (
+    CG635CMOSStandard,
+    CG635Communication,
+    CG635QStandard,
+    CG635Timebase,
+)
+from .exceptions import (
+    CG635CommandError,
+    CG635CommunicationError,
+    CG635OperationTimeoutError,
+)
+
+__all__ = [
+    "CG635ClockGenerator",
+    "CG635Communication",
+    "CG635CMOSStandard",
+    "CG635QStandard",
+    "CG635Timebase",
+    "CG635CommunicationError",
+    "CG635OperationTimeoutError",
+    "CG635CommandError",
+]
+
 if sys.version_info[:2] >= (3, 8):
     # TODO: Import directly (no need for conditional) when `python_requires = >= 3.8`
     from importlib.metadata import PackageNotFoundError, version  # pragma: no cover
