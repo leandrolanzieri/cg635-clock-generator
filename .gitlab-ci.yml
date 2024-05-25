@@ -63,11 +63,6 @@ build:
   script:
     - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes
 
-py37:
-  stage: test
-  image: "python:3.7"
-  <<: *test_script
-
 py38:
   stage: test
   image: "python:3.8"
@@ -97,6 +92,7 @@ static_tests:
     - tox -e lint
 
 pages:
+  image: "python:3.10"
   script:
     - tox -e docs
     - cp -r docs/_build/html public
