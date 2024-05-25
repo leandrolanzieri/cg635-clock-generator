@@ -221,7 +221,7 @@ class CG635ClockGenerator:
         Args:
             standard: The CMOS standard to set.
         """
-        if standard not in CG635CMOSStandard:
+        if not isinstance(standard, CG635CMOSStandard):
             _LOGGER.debug(f"The type of the parameter is {type(standard)}")
             raise CG635CommandError(f"Invalid CMOS standard: {standard}")
 
@@ -401,7 +401,7 @@ class CG635ClockGenerator:
         Args:
             standard: The Q standard to set.
         """
-        if standard not in CG635QStandard:
+        if not isinstance(standard, CG635QStandard):
             raise CG635CommandError(f"Invalid Q standard: {standard}")
 
         self._resource.write(f"QSTD {standard.value}")
