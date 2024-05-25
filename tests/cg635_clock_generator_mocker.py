@@ -51,7 +51,7 @@ class CG635ClockGeneratorMocker(BaseMocker):
 
     def _get_cmos_standard_levels(
         self, standard: CG635CMOSStandard
-    ) -> tuple[float, float]:
+    ) -> Tuple[float, float]:
         """
         Get the CMOS standard levels for the given standard. The levels are returned as
         a tuple of high and low levels.
