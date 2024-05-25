@@ -3,6 +3,7 @@ Mocker for the control of the SRS CG635 clock generator.
 """
 
 import logging
+from typing import Tuple
 
 from pyvisa_mock.base.base_mocker import BaseMocker, scpi
 
@@ -69,7 +70,7 @@ class CG635ClockGeneratorMocker(BaseMocker):
         elif standard == CG635CMOSStandard.V5_0:
             return 5.0, 0.0
 
-    def _get_q_standard_levels(self, standard: CG635QStandard) -> tuple[float, float]:
+    def _get_q_standard_levels(self, standard: CG635QStandard) -> Tuple[float, float]:
         """
         Get the Q/Q standard levels for the given standard. The levels are returned as a
         tuple of high and low levels.
