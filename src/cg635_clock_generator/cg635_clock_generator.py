@@ -4,6 +4,7 @@ Module for the control of the SRS CG635 clock generator.
 
 import logging
 from functools import wraps
+from typing import Optional
 
 import pyvisa
 import pyvisa.constants
@@ -99,17 +100,17 @@ class CG635ClockGenerator:
 
     Args:
         communication_type (CG635Communication): The communication method to use.
-        serial_device (str | None): The serial device to use for communication, in case
-            RS-232 or USB (via an adapter) is used. Cannot be used together with
+        serial_device (Optional[str]): The serial device to use for communication, in
+            case RS-232 or USB (via an adapter) is used. Cannot be used together with
             gpib_address nor resource_path. Default is None.
-        gpib_address (int | None): The GPIB address to use for communication, in case
+        gpib_address (Optional[int]): The GPIB address to use for communication, in case
             GPIB is used. Cannot be used together with serial_device nor resource_path.
             Default is None.
-        gpib_card (int | None): The number of the GPIB card to use for communication.
+        gpib_card (Optional[int]): The number of the GPIB card to use for communication.
             Default is None.
-        resource_path (str | None): The resource path to use for communication. Cannot
-            be used together with serial_device nor gpib_device. Default is None.
-        resource_manager (pyvisa.ResourceManager | None): The resource manager to use
+        resource_path (Optional[str]): The resource path to use for communication.
+            Cannot be used together with serial_device nor gpib_device. Default is None.
+        resource_manager (pyvisa.Optional[ResourceManager]): The resource manager to use
             for communication. If None, a new resource manager will be created. Default
             is None.
         communication_timeout (int): The communication timeout in milliseconds. Default
@@ -147,11 +148,11 @@ class CG635ClockGenerator:
     def __init__(
         self,
         communication_type: CG635Communication,
-        serial_device: str | None = None,
-        gpib_address: int | None = None,
-        gpib_card: int | None = None,
-        resource_path: str | None = None,
-        resource_manager: pyvisa.ResourceManager | None = None,
+        serial_device: Optional[str] = None,
+        gpib_address: Optional[int] = None,
+        gpib_card: Optional[int] = None,
+        resource_path: Optional[str] = None,
+        resource_manager: Optional[pyvisa.ResourceManager] = None,
         communication_timeout: int = 1000,
         operation_complete_timeout: int = 5,
         operation_complete_polling_interval: int = 0.1,
@@ -226,7 +227,7 @@ class CG635ClockGenerator:
 
         self._resource.write(f"STDC {standard.value}")
 
-    def get_cmos_standard(self) -> CG635CMOSStandard | None:
+    def get_cmos_standard(self) -> Optional[CG635CMOSStandard]:
         """
         Gets the CMOS standard. If the current CMOS levels are not standard, returns
         None.
@@ -405,7 +406,7 @@ class CG635ClockGenerator:
 
         self._resource.write(f"QSTD {standard.value}")
 
-    def get_q_standard(self) -> CG635QStandard | None:
+    def get_q_standard(self) -> Optional[CG635QStandard]:
         """
         Gets the Q standard. If the current Q levels are not standard, returns None.
 
