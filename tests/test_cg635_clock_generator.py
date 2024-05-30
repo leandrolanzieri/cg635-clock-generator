@@ -15,7 +15,9 @@ CMOS_NON_STD_LOW_LEVEL = 0.4
 
 
 def test_identification(cg635_clock_generator: CG635ClockGenerator):
-    assert "Stanford Research Systems" in cg635_clock_generator.get_identification()
+    assert (
+        "Stanford Research Systems,CG635" in cg635_clock_generator.get_identification()
+    )
 
 
 def test_set_cmos_levels(cg635_clock_generator: CG635ClockGenerator):
@@ -144,6 +146,9 @@ def test_frequency(cg635_clock_generator: CG635ClockGenerator):
     assert cg635_clock_generator.get_frequency() == 1e-3
 
 
+@pytest.mark.skipif(
+    "config.getvalue('hil')", reason="Not valid for hardware-in-the-loop"
+)
 def test_operation_timeout(
     cg635_clock_generator: CG635ClockGenerator,
     mock_cg635_clock_generator: CG635ClockGeneratorMocker,
