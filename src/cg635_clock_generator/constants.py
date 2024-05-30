@@ -20,9 +20,6 @@ class CG635Communication(Enum):
     GPIB = "GPIB"
     """GPIB communication."""
 
-    USB = "USB"
-    """USB communication (in case of an RS-232 to USB adapter)."""
-
     OTHER = "OTHER"
     """Other communication bus."""
 

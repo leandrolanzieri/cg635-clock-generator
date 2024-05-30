@@ -118,6 +118,10 @@ class CG635ClockGeneratorMocker(BaseMocker):
             self.stb |= 1 << 5
             self.set_service_request_event()
 
+    @scpi("*STB?")
+    def _get_status_byte(self) -> str:
+        return f"{self.stb}"
+
     @scpi("*RST")
     def _reset(self) -> None:
         self._go_to_factory_settings()
@@ -170,14 +174,14 @@ class CG635ClockGeneratorMocker(BaseMocker):
     def _get_cmos_high_level(self) -> str:
         return f"{self._cmos_high_level}"
 
-    @scpi("QSTD <standard>")
+    @scpi("STDQ <standard>")
     def _set_q_standard(self, standard: str) -> None:
         _standard = CG635QStandard(int(standard))
         high, low = self._get_q_standard_levels(_standard)
         self._q_high_level = high
         self._q_low_level = low
 
-    @scpi("QSTD?")
+    @scpi("STDQ?")
     def _get_q_standard(self) -> str:
         if self._q_low_level == -1.8 and self._q_high_level == -1.0:
             response = CG635QStandard.ECL.value
@@ -240,6 +244,6 @@ class CG635ClockGeneratorMocker(BaseMocker):
     def _get_output(self) -> str:
         return f"{1 if self._running else 0}"
 
-    @scpi("TIME?")
+    @scpi("TIMB?")
     def _get_timebase(self) -> str:
         return "0"

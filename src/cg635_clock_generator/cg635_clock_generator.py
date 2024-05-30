@@ -4,6 +4,7 @@ Module for the control of the SRS CG635 clock generator.
 
 import logging
 from functools import wraps
+from time import sleep, time
 from typing import Optional
 
 import pyvisa
@@ -51,12 +52,6 @@ def _verify_operation(method):
         # generate a service request when any unmasked bit on the event register is set
         instance._resource.write("*SRE 32")
 
-        # enable the service request event on the event register
-        instance._resource.enable_event(
-            pyvisa.constants.EventType.service_request,
-            pyvisa.constants.EventMechanism.queue,
-        )
-
         # now execute the operation
         method(instance, *args, **kwargs)
 
@@ -64,21 +59,14 @@ def _verify_operation(method):
         # this sets the OPC bit on the event register when the operation is completed.
         instance._resource.write("*OPC")
 
-        # wait for the event to fire (operation complete)
-        try:
-            response = instance._resource.wait_on_event(
-                pyvisa.constants.EventType.service_request,
-                timeout=instance._operation_complete_timeout * 1000,
-            )
-        except pyvisa.errors.VisaIOError as e:
-            if e.error_code == pyvisa.constants.StatusCode.error_timeout:
-                raise CG635OperationTimeoutError("Operation did not complete in time")
-
-        if (
-            response.event.event_type != pyvisa.constants.EventType.service_request
-            or response.timed_out
-        ):
-            # TODO: be more specific with the error message
+        start = time()
+        while time() - start < instance._operation_complete_timeout:
+            sleep(instance._operation_complete_polling_interval)
+            serial_poll_status = int(instance._resource.query("*STB?"))
+            if serial_poll_status & 1 << 5:
+                # instrument requests service
+                break
+        else:
             raise CG635OperationTimeoutError("Operation did not complete in time")
 
         event_status = int(instance._resource.query("*ESR?"))
@@ -155,7 +143,7 @@ class CG635ClockGenerator:
         resource_manager: Optional[pyvisa.ResourceManager] = None,
         communication_timeout: int = 1000,
         operation_complete_timeout: int = 5,
-        operation_complete_polling_interval: int = 0.1,
+        operation_complete_polling_interval: float = 0.1,
     ):
         self._communication_timeout = communication_timeout
         self._communication_type = communication_type
@@ -174,12 +162,6 @@ class CG635ClockGenerator:
             self._gpib_card = gpib_card or self.GPIP_DEFAULT_CARD
             self._serial_device = None
             self._resource_path = f"GPIB{self._gpib_card}::{self._gpib_address}::INSTR"
-
-        if self._communication_type == CG635Communication.USB:
-            assert serial_device is not None
-            self._serial_device = serial_device
-            self._gpib_address = None
-            self._resource_path = f"ASRL{serial_device}::INSTR"
 
         if resource_path is not None:
             self._resource_path = resource_path
@@ -404,7 +386,7 @@ class CG635ClockGenerator:
         if not isinstance(standard, CG635QStandard):
             raise CG635CommandError(f"Invalid Q standard: {standard}")
 
-        self._resource.write(f"QSTD {standard.value}")
+        self._resource.write(f"STDQ {standard.value}")
 
     def get_q_standard(self) -> Optional[CG635QStandard]:
         """
@@ -413,7 +395,7 @@ class CG635ClockGenerator:
         Raises:
             CG635CommunicationError: If the Q standard is invalid.
         """
-        response = int(self._resource.query("QSTD?").strip())
+        response = int(self._resource.query("STDQ?").strip())
         if response == -1:
             return None
 
@@ -431,7 +413,7 @@ class CG635ClockGenerator:
         Raises:
             CG635CommunicationError: If the timebase is invalid.
         """
-        response = int(self._resource.query("TIME?").strip())
+        response = int(self._resource.query("TIMB?").strip())
 
         try:
             timebase = CG635Timebase(response)
