@@ -8,6 +8,14 @@ Interface with a Stanford Research Systems CG635 Synthesized Clock Generator.
 $ pip install git+https://gitlab.desy.de/leandro.lanzieri/cg635-clock-generator.git
 ```
 
+## Supported Features
+
+- Frequency control
+- Phase control
+- CMOS output levels and standards control
+- Q/*Q outputs levels and standards control
+- R232 communication
+
 ## Usage
 
 ```python
