@@ -99,3 +99,19 @@ pages:
   artifacts:
     paths:
       - public
+
+publish:
+  stage: release
+  dependencies: [build]
+  image: "python:3.10"
+  rules: [if: $CI_COMMIT_TAG]
+  variables:
+    # See: https://pypi.org/help/#apitoken
+    # Needs a PYPI_TOKEN protected variable to be configured for `v*` tags, see:
+    # https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project
+    # https://docs.gitlab.com/ee/user/project/protected_tags.html
+    TWINE_REPOSITORY: pypi
+    TWINE_USERNAME: __token__
+    TWINE_PASSWORD: $PYPI_TOKEN
+  script:
+    - tox -e publish
