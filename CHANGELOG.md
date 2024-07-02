@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 0.2
+## Version 1.0.2
 
 - Use pyvisa-py as default backend
 
