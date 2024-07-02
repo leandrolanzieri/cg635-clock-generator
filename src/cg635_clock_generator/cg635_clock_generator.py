@@ -149,7 +149,7 @@ class CG635ClockGenerator:
         self._communication_type = communication_type
         self._operation_complete_timeout = operation_complete_timeout
         self._operation_complete_polling_interval = operation_complete_polling_interval
-        self._resource_manager = resource_manager or pyvisa.ResourceManager()
+        self._resource_manager = resource_manager or pyvisa.ResourceManager("@py")
 
         if self._communication_type == CG635Communication.RS232:
             assert serial_device is not None
