@@ -151,16 +151,18 @@ class CG635ClockGenerator:
         self._operation_complete_polling_interval = operation_complete_polling_interval
         self._resource_manager = resource_manager or pyvisa.ResourceManager("@py")
 
+        self._serial_device: Optional[str] = None
+        self._gpib_address: Optional[int] = None
+        self._gpib_card: Optional[int] = None
+
         if self._communication_type == CG635Communication.RS232:
             assert serial_device is not None
             self._serial_device = serial_device
-            self._gpib_address = None
             self._resource_path = f"ASRL{serial_device}::INSTR"
 
         if self._communication_type == CG635Communication.GPIB:
             self._gpib_address = gpib_address or self.GPIB_DEFAULT_ADDRESS
             self._gpib_card = gpib_card or self.GPIP_DEFAULT_CARD
-            self._serial_device = None
             self._resource_path = f"GPIB{self._gpib_card}::{self._gpib_address}::INSTR"
 
         if resource_path is not None:
