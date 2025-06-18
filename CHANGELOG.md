@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.1.0
+- Improve display of module documentation
+- Migrate to use only `pyproject.toml`
+
 ## Version 1.0.3
 
 - Fix default values for generator attributes
