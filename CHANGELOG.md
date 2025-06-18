@@ -1,8 +1,5 @@
 # Changelog
 
-## Version 1.1.1
-- Fix required python version
-
 ## Version 1.1.0
 - Improve display of module documentation
 - Migrate to use only `pyproject.toml`
