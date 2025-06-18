@@ -6,10 +6,14 @@ stages:
 
 variables:
   # Change cache dirs to be inside the project (can only cache local items)
-  PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
-  PIPX_HOME: $CI_PROJECT_DIR/.cache/pipx
   PRE_COMMIT_HOME: $CI_PROJECT_DIR/.cache/pre-commit
-
+  UV_CACHE_DIR: $CI_PROJECT_DIR/.cache/uv
+  UV_VERSION: "0.7.4"
+  PYTHON_VERSION: "3.13"
+  BASE_LAYER: bookworm-slim
+  # GitLab CI creates a separate mountpoint for the build directory,
+  # so we need to copy instead of using hard links.
+  UV_LINK_MODE: copy
 
 workflow:
   rules:
@@ -22,36 +26,31 @@ workflow:
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == 'push'
       when: never  # Avoid running the pipeline twice (push + merge request)
     - if: $CI_COMMIT_BRANCH || $CI_COMMIT_TAG
-    # You can also set recurring execution of the pipeline, see:
-    # https://docs.gitlab.com/ee/ci/pipelines/schedules.html
 
 cache:
-  key: pip-pipx-pre-commit-$CI_JOB_IMAGE
+  key: uv-pre-commit-$CI_JOB_IMAGE
   paths:
-    - .cache/pip
-    - .cache/pipx
+    - .cache/uv
     - .cache/pre-commit
 
 default:
   before_script:
     - python --version  # useful for debugging
-    # Setup git (used for setuptools-scm)
-    - git config --global user.email "you@example.com"
-    - git config --global user.name "Your Name"
-    # Install dependencies for the testing environment
-    - pip install -U pip tox pipx
+    - apt update -y
+    - apt install git -y
+    - uv sync
 
 check:
   stage: prepare
-  image: "python:3.10"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER"
   script:
-    - pipx run pre-commit run --all-files --show-diff-on-failure
+    - uv run poe pre_commit
 
 build:
   stage: prepare
-  image: "python:3.10"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER"
   script:
-    - tox -e clean,build
+    - uv build
   variables:
     GIT_DEPTH: "0"  # deep-clone
   artifacts:
@@ -61,40 +60,67 @@ build:
 .test_script: &test_script
   dependencies: [build]
   script:
-    - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes
+    - uv run poe test --junit-xml=$TEST_PYTHON_VERSION_junit.xml
+    - uv cache prune --ci
+  artifacts:
+    when: always
+    paths:
+      - $TEST_PYTHON_VERSION_junit.xml
+    reports:
+      junit: $TEST_PYTHON_VERSION_junit.xml
 
 py38:
   stage: test
-  image: "python:3.8"
+  variables:
+    TEST_PYTHON_VERSION: "3.8"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$TEST_PYTHON_VERSION-$BASE_LAYER"
   <<: *test_script
 
 py39:
   stage: test
-  image: "python:3.9"
+  variables:
+    TEST_PYTHON_VERSION: "3.9"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$TEST_PYTHON_VERSION-$BASE_LAYER"
   <<: *test_script
 
 py310:
   stage: test
-  image: "python:3.10"
+  variables:
+    TEST_PYTHON_VERSION: "3.10"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$TEST_PYTHON_VERSION-$BASE_LAYER"
   <<: *test_script
 
-mamba:
+py311:
   stage: test
-  image: "condaforge/mambaforge"
-  before_script:
-    - mamba install -y pip pipx 'tox!=4.0.*,!=4.1.*'
+  variables:
+    TEST_PYTHON_VERSION: "3.11"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$TEST_PYTHON_VERSION-$BASE_LAYER"
+  <<: *test_script
+
+py312:
+  stage: test
+  variables:
+    TEST_PYTHON_VERSION: "3.12"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$TEST_PYTHON_VERSION-$BASE_LAYER"
+  <<: *test_script
+
+py313:
+  stage: test
+  variables:
+    TEST_PYTHON_VERSION: "3.13"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$TEST_PYTHON_VERSION-$BASE_LAYER"
   <<: *test_script
 
 static_tests:
   stage: test
-  image: "python:3.10"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER"
   script:
-    - tox -e lint
+    - uv run poe pre_commit
 
 pages:
-  image: "python:3.10"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER"
   script:
-    - tox -e docs
+    - uv run poe docs
     - cp -r docs/_build/html public
   artifacts:
     paths:
@@ -103,15 +129,13 @@ pages:
 publish:
   stage: release
   dependencies: [build]
-  image: "python:3.10"
+  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER"
   rules: [if: $CI_COMMIT_TAG]
   variables:
     # See: https://pypi.org/help/#apitoken
     # Needs a PYPI_TOKEN protected variable to be configured for `v*` tags, see:
     # https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project
     # https://docs.gitlab.com/ee/user/project/protected_tags.html
-    TWINE_REPOSITORY: pypi
-    TWINE_USERNAME: __token__
-    TWINE_PASSWORD: $PYPI_TOKEN
+    UV_PUBLISH_TOKEN: $PYPI_TOKEN
   script:
-    - tox -e publish
+    - uv publish
