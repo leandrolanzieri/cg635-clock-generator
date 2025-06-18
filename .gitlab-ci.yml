@@ -69,20 +69,6 @@ build:
     reports:
       junit: $TEST_PYTHON_VERSION_junit.xml
 
-py38:
-  stage: test
-  variables:
-    TEST_PYTHON_VERSION: "3.8"
-  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$TEST_PYTHON_VERSION-$BASE_LAYER"
-  <<: *test_script
-
-py39:
-  stage: test
-  variables:
-    TEST_PYTHON_VERSION: "3.9"
-  image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$TEST_PYTHON_VERSION-$BASE_LAYER"
-  <<: *test_script
-
 py310:
   stage: test
   variables:
