@@ -47,17 +47,17 @@ print(f"Phase is {phase} degrees")
 
 During normal development and for the CI the unit test suite is executed on a mock
 device using pyvisa-mock. It is also possible to run tests on real hardware connected
-to your system. Just set the `hil` flag when running `tox`
+to your system. Just call:
 
 ```bash
-$ tox -- --hil
+$ uv run poe test_hil
 ```
 
 By default it will try to connect to `/dev/ttyUSB0`, but you can specify a different
 device using the `--hil_serial_device` option:
 
 ```bash
-$ tox -- --hil --hil_serial_device /dev/ttyUSB1
+$ uv run poe test_hil --hil_serial_device /dev/ttyUSB1
 ```
 
 ## Status

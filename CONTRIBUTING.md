@@ -53,9 +53,9 @@ done in the same way was a code contribution.
 We are using [CommonMark](https://commonmark.org/) format.
 
 When working on documentation changes in your local machine, you can
-compile them using `tox`:
+compile them using `poe`:
 
-    $ tox -e docs
+    $ uv run poe docs
 
 
 and use Python\'s built-in web server for a preview in your web browser
@@ -149,12 +149,12 @@ easily be done via `venv`:
 
 5.  Please check that your changes don\'t break any unit tests with:
 
-        $ tox
+        $ uv run poe test
 
-    (after having installed `tox`\_ with `pip install tox` or `pipx`).
+    (after having installed `uv`\_ with `pip install uv` or `pipx`).
 
-    You can also use `tox`\_ to run several other pre-configured tasks
-    in the repository. Try `tox -av` to see a list of the available
+    You can also use `poe`\_ to run several other pre-configured tasks
+    in the repository. Try `uv run poe` to see a list of the available
     checks.
 
 ### Submit your contribution
@@ -180,42 +180,6 @@ package:
     remove all the egg files or the complete egg folder, i.e., `.eggs`,
     as well as the `*.egg-info` folders in the `src` folder or
     potentially in the root of your project.
-
-2.  Sometimes `tox`\_ misses out when new dependencies are added,
-    especially to `setup.cfg` and `docs/requirements.txt`. If you find
-    any problems with missing dependencies when running a command with
-    `tox`\_, try to recreate the `tox` environment using the `-r` flag.
-    For example, instead of:
-
-        tox -e docs
-
-    Try running:
-
-        tox -r -e docs
-
-3.  Make sure to have a reliable `tox`\_ installation that uses the
-    correct Python version (e.g., 3.8+). When in doubt you can run:
-
-        tox --version
-        ## OR
-        which tox
-
-    If you have trouble and are seeing weird errors upon running
-    `tox`\_, you can also try to create a dedicated [virtual
-    environment](https://realpython.com/python-virtual-environments-a-primer/)
-    with a `tox`\_ binary freshly installed. For example:
-
-        python3 -m venv .venv
-        source .venv/bin/activate
-        .venv/bin/pip install tox
-        .venv/bin/tox -e all
-
-4.  [Pytest can drop
-    you](https://docs.pytest.org/en/stable/how-to/failures.html#using-python-library-pdb-with-pytest)
-    in an interactive session in the case an error occurs. In order to
-    do that you need to pass a `--pdb` option (for example by running
-    `tox -- -k <NAME OF THE FALLING TEST> --pdb`). You can also setup
-    breakpoints manually instead of using the `--pdb` option.
 
 
 [^1]: Even though, these resources focus on open source projects and
