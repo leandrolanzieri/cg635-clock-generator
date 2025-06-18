@@ -7,7 +7,7 @@ from typing import Tuple
 
 from pyvisa_mock.base.base_mocker import BaseMocker, scpi
 
-from cg635_clock_generator.constants import CG635CMOSStandard, CG635QStandard
+from cg635_clock_generator import CG635CMOSStandard, CG635QStandard
 
 __author__ = "Leandro Lanzieri"
 __copyright__ = "Deutsches Elektronen-Synchrotron, DESY"

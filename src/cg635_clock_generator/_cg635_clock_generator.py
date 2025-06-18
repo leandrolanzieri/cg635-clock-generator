@@ -10,13 +10,13 @@ from typing import Optional
 import pyvisa
 import pyvisa.constants
 
-from cg635_clock_generator.constants import (
+from cg635_clock_generator._constants import (
     CG635CMOSStandard,
     CG635Communication,
     CG635QStandard,
     CG635Timebase,
 )
-from cg635_clock_generator.exceptions import (
+from cg635_clock_generator._exceptions import (
     CG635CommandError,
     CG635CommunicationError,
     CG635OperationTimeoutError,

@@ -6,9 +6,9 @@ from cg635_clock_generator import (
     CG635CMOSStandard,
     CG635CommandError,
     CG635OperationTimeoutError,
+    CG635QStandard,
     CG635Timebase,
 )
-from cg635_clock_generator.constants import CG635QStandard
 
 CMOS_NON_STD_HIGH_LEVEL = 1.6
 CMOS_NON_STD_LOW_LEVEL = 0.4

@@ -1,13 +1,13 @@
 import sys
 
-from .cg635_clock_generator import CG635ClockGenerator
-from .constants import (
+from ._cg635_clock_generator import CG635ClockGenerator
+from ._constants import (
     CG635CMOSStandard,
     CG635Communication,
     CG635QStandard,
     CG635Timebase,
 )
-from .exceptions import (
+from ._exceptions import (
     CG635CommandError,
     CG635CommunicationError,
     CG635OperationTimeoutError,
