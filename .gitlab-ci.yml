@@ -106,6 +106,8 @@ static_tests:
 pages:
   image: "ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER"
   script:
+    - uv build
+    - uv pip install dist/*.whl
     - uv run poe docs
     - cp -r docs/_build/html public
   artifacts:
