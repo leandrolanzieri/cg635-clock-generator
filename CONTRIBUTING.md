@@ -22,10 +22,10 @@ terms of behavior guidelines.
 ## Issue Reports
 
 If you experience bugs or general issues with `cg635-clock-generator`,
-please have a look on the [issue
-tracker](https://gitlab.desy.de/leandro.lanzieri/cg635-clock-generator/-/issues).
+please have a look on the
+[issue tracker](https://gitlab.desy.de/leandro.lanzieri/cg635-clock-generator/-/issues).
 If you don\'t see anything useful there, please feel free to fire an
-issue report.
+issue report or write email (check pypi.org or sources for the address).
 
 Please don\'t forget to include the closed issues in your search.
 Sometimes a solution was already reported, and the problem is considered
@@ -37,6 +37,9 @@ reproduce the problem. Please try also to simplify the reproduction
 steps to a very minimal example that still illustrates the problem you
 are facing. By removing other factors, you help us to identify the root
 cause of the issue.
+
+You will need an account for this. Check
+[this section](#getting-an-account-on-this-gitlab-instance).
 
 ## Documentation Improvements
 
@@ -53,7 +56,7 @@ done in the same way was a code contribution.
 We are using [CommonMark](https://commonmark.org/) format.
 
 When working on documentation changes in your local machine, you can
-compile them using `poe`:
+compile them using `uv`:
 
     $ uv run poe docs
 
@@ -70,20 +73,21 @@ and use Python\'s built-in web server for a preview in your web browser
 ### Submit an issue
 
 Before you work on any non-trivial code contribution it\'s best to first
-create a report in the [issue
-tracker](https://gitlab.desy.de/leandro.lanzieri/cg635-clock-generator/-/issues)
+create a report in the
+[issue tracker](https://gitlab.desy.de/leandro.lanzieri/cg635-clock-generator/-/issues)
 to start a discussion on the subject. This often provides additional
 considerations and avoids unnecessary work.
+
+You will need an account for this. Check
+[this section](#getting-an-account-on-this-gitlab-instance).
 
 ### Create an environment
 
 Before you start coding, we recommend creating an isolated [virtual
 environment](https://realpython.com/python-virtual-environments-a-primer/)
-to avoid any problems with your installed Python packages. This can
-easily be done via `venv`:
-
-    $ python3 -m venv <PATH TO VENV>
-    $ source <PATH TO VENV>/bin/activate
+to avoid any problems with your installed Python packages. This project
+uses [uv](https://docs.astral.sh/uv/) for dependency management, which
+will automatically create and manage a virtual environment for you.
 
 ### Clone the repository
 
@@ -92,25 +96,24 @@ easily be done via `venv`:
         $ git clone git@gitlab.desy.de:leandro.lanzieri/cg635-clock-generator.git
         $ cd cg635-clock-generator
 
-2.  You should run:
+2.  Install the project and its dependencies using `uv`:
 
-        $ pip install -U pip setuptools -e .
+        $ uv sync --all-extras
 
-    to be able to import the package under development in the Python
-    REPL.
+    This will create a virtual environment, install all dependencies
+    (including development dependencies), and make the package available
+    for import in editable mode.
 
-3.  Install `pre-commit`\_:
+3.  Install `pre-commit`:
 
-        $ pip install pre-commit
-        $ pre-commit install
+        $ uv run pre-commit install
 
     `cg635-clock-generator` comes with a lot of hooks configured to
     automatically help the developer to check the code being written.
 
 ### Implement your changes
 
-1.  Create a branch to hold your changes (for this you need an account on
-    gitlab.desy.de and developer rights):
+1.  Create a branch to hold your changes:
 
         $ git checkout -b my-feature
 
@@ -121,6 +124,9 @@ easily be done via `venv`:
     to new functions, modules and classes, especially if they are part
     of public APIs.
 
+    The project configuration is centralized in `pyproject.toml`, which
+    contains all the metadata, dependencies, and tool configurations.
+
 3.  Add yourself to the list of contributors in `AUTHORS.md`.
 
 4.  When you're done editing, record your changes in [git](https://git-scm.com) by running:
@@ -128,11 +134,10 @@ easily be done via `venv`:
         $ git add <MODIFIED FILES>
         $ git commit
 
-    Please make sure to see the validation messages from `pre-commit`\_
+    Please make sure to see the validation messages from `pre-commit`
     and fix any eventual issues. This should automatically use
-    [flake8](https://flake8.pycqa.org/en/stable/)/[black](https://pypi.org/project/black/)
-    to check/fix the code style in a way that is compatible with the
-    project.
+    [ruff](https://docs.astral.sh/ruff/) to check/fix the code style
+    in a way that is compatible with the project.
 
     **Important**: Don\'t forget to add unit tests and documentation in case your
     contribution adds an additional feature and is not just a bugfix.
@@ -151,15 +156,16 @@ easily be done via `venv`:
 
         $ uv run poe test
 
-    (after having installed `uv`\_ with `pip install uv` or `pipx`).
+    You can also run other development tasks using the available poe commands:
 
-    You can also use `poe`\_ to run several other pre-configured tasks
-    in the repository. Try `uv run poe` to see a list of the available
-    checks.
+    - `uv run poe test` - Run unit tests with coverage
+    - `uv run poe test_hil` - Run hardware-in-the-loop tests
+    - `uv run poe docs` - Build documentation
+    - `uv run poe pre_commit` - Run pre-commit hooks on all files
 
 ### Submit your contribution
 
-1.  If everything works fine, push your local branch to GitHub with:
+1.  If everything works fine, push your local branch to GitLab with:
 
         $ git push -u origin my-feature
 
@@ -167,19 +173,36 @@ easily be done via `venv`:
 2.  Go to the web page of your fork and click \"Create merge request\" to
     send your changes for review.
 
+You will need an account for this. Check
+[this section](#getting-an-account-on-this-gitlab-instance).
+
 ### Troubleshooting
 
 The following tips can be used when facing problems to build or test the
 package:
 
-1.  Make sure to fetch all the tags from the upstream
-    [repository](https://gitlab.desy.de/leandro.lanzieri/cg635-clock-generator).
-    The command `git describe --abbrev=0 --tags` should return the
-    version you are expecting. If you are trying to run CI scripts in a
-    fork repository, make sure to push all the tags. You can also try to
-    remove all the egg files or the complete egg folder, i.e., `.eggs`,
-    as well as the `*.egg-info` folders in the `src` folder or
-    potentially in the root of your project.
+1.  Sometimes `uv` might have issues with cached dependencies. If you find
+    any problems with missing dependencies or version conflicts, try to
+    recreate the virtual environment:
+
+        uv sync --reinstall
+
+    This will reinstall all dependencies from scratch.
+
+2.  Make sure to have a reliable `uv` installation. When in doubt you can run:
+
+        uv --version
+
+    If you have trouble with `uv`, you can try installing it fresh:
+
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+
+3.  [Pytest can drop
+    you](https://docs.pytest.org/en/stable/how-to/failures.html#using-python-library-pdb-with-pytest)
+    in an interactive session in the case an error occurs. In order to
+    do that you need to pass a `--pdb` option (for example by running
+    `uv run pytest -k <NAME OF THE FALLING TEST> --pdb`). You can also setup
+    breakpoints manually instead of using the `--pdb` option.
 
 
 [^1]: Even though, these resources focus on open source projects and
@@ -187,3 +210,11 @@ package:
     developers to collectively create software are general and can be
     applied to all sorts of environments, including private companies
     and proprietary code bases.
+
+## Getting an Account on this GitLab Instance
+
+To file issues and merge requests you'll need an account with `https://gitlab.desy.de`.
+If you happen to have a DESY account you can directly sign in.
+In case you don't have a DESY account, browse to the
+[sign in page](https://gitlab.desy.de/users/sign_in), and click on `Helmholtz AAI`.
+There, you can choose different identity providers, including Google and GitHub.
