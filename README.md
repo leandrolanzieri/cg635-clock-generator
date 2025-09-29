@@ -14,7 +14,7 @@ $ pip install cg635-clock-generator
 - Phase control
 - CMOS output levels and standards control
 - Q/*Q outputs levels and standards control
-- R232 communication
+- RS-232 communication
 
 ## Usage
 
@@ -62,7 +62,7 @@ $ uv run poe test_hil --hil_serial_device /dev/ttyUSB1
 
 ## Status
 
-Currently only the RS232 communication has been tested on the device.
+Currently only the RS-232 communication has been tested on the device.
 
 ## Documentation
 
@@ -71,4 +71,4 @@ For more details of the module API, check the
 
 ## Feeling like contributing?
 
-Great! Check the [Contributing Guide](CONTRIBUTING.md) to get started.
+Great! Check the [Contributing Guide](contributing) to get started.
