@@ -29,7 +29,7 @@ source = "uv-dynamic-versioning"
 [tool.uv-dynamic-versioning]
 vcs = "git"
 style = "pep440"
-bump = true
+bump = false
 
 [dependency-groups]
 dev = [
@@ -42,7 +42,7 @@ dev = [
     "pre-commit>=3.4.0",
     "myst-parser[linkify]",
     "sphinx>=3.2.1",
-    "sphinx_rtd_theme",
+    "furo",
 ]
 
 [tool.pytest.ini_options]

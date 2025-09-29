@@ -11,6 +11,10 @@ import os
 import sys
 import shutil
 
+from importlib.metadata import version as get_version
+from packaging.version import Version
+import datetime
+
 # -- Path setup --------------------------------------------------------------
 
 __location__ = os.path.dirname(__file__)
@@ -106,20 +110,11 @@ master_doc = "index"
 
 # General information about the project.
 project = "cg635-clock-generator"
-copyright = "2024, Deutsches Elektronen-Synchrotron, DESY"
+year = datetime.datetime.now().year
+copyright = f"{year}, Deutsches Elektronen-Synchrotron, DESY"
 
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# version: The short X.Y version.
-# release: The full version, including alpha/beta/rc tags.
-# If you don’t need the separation provided between version and release,
-# just set them both to the same value.
-try:
-    from cg635_clock_generator import __version__ as version
-except ImportError:
-    version = ""
+_version = Version(get_version("cg635-clock-generator"))
+version = f"Version {_version.base_version}"
 
 if not version or version.lower() == "unknown":
     version = os.getenv("READTHEDOCS_VERSION", "unknown")  # automatically set by RTD
@@ -171,22 +166,19 @@ todo_emit_warnings = True
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "alabaster"
+html_theme = "furo"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {
-    "sidebar_width": "300px",
-    "page_width": "1200px"
-}
+html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-# html_title = None
+html_title = f"Documentation for {project} <br><small>{version}</small>"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 # html_short_title = None
