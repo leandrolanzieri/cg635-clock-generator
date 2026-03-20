@@ -1,7 +1,7 @@
 [project]
 name = "cg635-clock-generator"
 description = "Interface with a Stanford Research Systems CG635 Synthesized Clock Generator"
-authors = [{ name = "Leandro Lanzieri", email = "leandro.lanzieri@desy.de" }]
+authors = [{ name = "Leandro Lanzieri", email = "leandro.lanzieri@tuhh.de" }]
 license = "LGPL-3.0-or-later"
 license-files = ["LICENSE.txt"]
 readme = "README.md"
@@ -15,8 +15,8 @@ dynamic = ["version"]
 classifiers = ["Development Status :: 5 - Production/Stable", "Programming Language :: Python"]
 
 [project.urls]
-Source = "https://gitlab.desy.de/leandro.lanzieri/cg635-clock-generator"
-Documentation = "https://cg635-clock-generator-leandro-lanzieri-c9d5fa14e6af42e02aa27f45.pages.desy.de"
+Source = "https://github.com/leandrolanzieri/cg635-clock-generator"
+Documentation = "https://leandrolanzieri.github.io/cg635-clock-generator"
 
 
 [build-system]
