@@ -67,7 +67,7 @@ Currently only the RS-232 communication has been tested on the device.
 ## Documentation
 
 For more details of the module API, check the
-[online documentation](http://cg635-clock-generator-leandro-lanzieri-c9d5fa14e6af42e02aa27f45.pages.desy.de/).
+[online documentation](https://leandrolanzieri.github.io/cg635-clock-generator).
 
 ## Feeling like contributing?
 
