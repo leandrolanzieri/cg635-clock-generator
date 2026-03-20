@@ -23,7 +23,7 @@ terms of behavior guidelines.
 
 If you experience bugs or general issues with `cg635-clock-generator`,
 please have a look on the
-[issue tracker](https://gitlab.desy.de/leandro.lanzieri/cg635-clock-generator/-/issues).
+[issue tracker](https://github.com/leandrolanzieri/cg635-clock-generator/issues).
 If you don\'t see anything useful there, please feel free to fire an
 issue report or write email (check pypi.org or sources for the address).
 
@@ -37,9 +37,6 @@ reproduce the problem. Please try also to simplify the reproduction
 steps to a very minimal example that still illustrates the problem you
 are facing. By removing other factors, you help us to identify the root
 cause of the issue.
-
-You will need an account for this. Check
-[this section](#getting-an-account-on-this-gitlab-instance).
 
 ## Documentation Improvements
 
@@ -74,12 +71,9 @@ and use Python\'s built-in web server for a preview in your web browser
 
 Before you work on any non-trivial code contribution it\'s best to first
 create a report in the
-[issue tracker](https://gitlab.desy.de/leandro.lanzieri/cg635-clock-generator/-/issues)
+[issue tracker](https://github.com/leandrolanzieri/cg635-clock-generator/issues)
 to start a discussion on the subject. This often provides additional
 considerations and avoids unnecessary work.
-
-You will need an account for this. Check
-[this section](#getting-an-account-on-this-gitlab-instance).
 
 ### Create an environment
 
@@ -91,9 +85,9 @@ will automatically create and manage a virtual environment for you.
 
 ### Clone the repository
 
-1.  Clone this copy to your local disk:
+1.  Fork the repository on GitHub, then clone your fork to your local disk:
 
-        $ git clone git@gitlab.desy.de:leandro.lanzieri/cg635-clock-generator.git
+        $ git clone git@github.com:<your-username>/cg635-clock-generator.git
         $ cd cg635-clock-generator
 
 2.  Install the project and its dependencies using `uv`:
@@ -165,16 +159,13 @@ will automatically create and manage a virtual environment for you.
 
 ### Submit your contribution
 
-1.  If everything works fine, push your local branch to GitLab with:
+1.  If everything works fine, push your local branch to GitHub with:
 
         $ git push -u origin my-feature
 
 
-2.  Go to the web page of your fork and click \"Create merge request\" to
+2.  Go to the web page of your fork on GitHub and click "Compare & pull request" to
     send your changes for review.
-
-You will need an account for this. Check
-[this section](#getting-an-account-on-this-gitlab-instance).
 
 ### Troubleshooting
 
@@ -210,11 +201,3 @@ package:
     developers to collectively create software are general and can be
     applied to all sorts of environments, including private companies
     and proprietary code bases.
-
-## Getting an Account on this GitLab Instance
-
-To file issues and merge requests you'll need an account with `https://gitlab.desy.de`.
-If you happen to have a DESY account you can directly sign in.
-In case you don't have a DESY account, browse to the
-[sign in page](https://gitlab.desy.de/users/sign_in), and click on `Helmholtz AAI`.
-There, you can choose different identity providers, including Google and GitHub.
